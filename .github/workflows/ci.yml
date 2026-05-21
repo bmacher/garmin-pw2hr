@@ -52,14 +52,23 @@ jobs:
           export DISPLAY=:1
           Xvfb $DISPLAY -screen 0 1280x1024x24 &
           sleep 2
-          simulator &
-          sleep 15
-          monkeydo bin/test.prg ${{ matrix.device }} -t | tee /tmp/test_result.txt || true
+          simulator > /dev/null 2>&1 &
+          # Wait for simulator to be ready (retry up to 30s)
+          for i in $(seq 1 6); do
+            sleep 5
+            if monkeydo bin/test.prg ${{ matrix.device }} -t > /tmp/test_result.txt 2>&1; then
+              break
+            fi
+            if ! grep -q "Unable to connect" /tmp/test_result.txt; then
+              break
+            fi
+            echo "Retry $i: simulator not ready yet..."
+          done
+          cat /tmp/test_result.txt
           result=$(tail -1 /tmp/test_result.txt)
           if [[ "$result" == PASSED* ]]; then
             echo "✅ ${{ matrix.device }}: Tests passed"
           else
             echo "❌ ${{ matrix.device }}: Tests failed"
-            cat /tmp/test_result.txt
             exit 1
           fi
