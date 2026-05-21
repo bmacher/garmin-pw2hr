@@ -13,6 +13,9 @@ bin/
 .DS_Store
 Thumbs.db
 
+# Release output
+release/
+
 # Developer key
 developer_key.der
 developer_key
