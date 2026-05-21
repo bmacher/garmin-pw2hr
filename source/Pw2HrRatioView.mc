@@ -1,0 +1,157 @@
+import Toybox.Activity;
+import Toybox.Application.Storage;
+import Toybox.Graphics;
+import Toybox.Lang;
+import Toybox.WatchUi;
+
+class Pw2HrRatioView extends WatchUi.DataField {
+
+    private const MODE_CURRENT = 0;
+    private const MODE_WORKOUT_AVG = 1;
+    private const MODE_ROUND_AVG = 2;
+    private const MODE_ROLLING_AVG = 3;
+
+    private var _ratio as Float = 0.0f;
+    private var _mode as Number = 0;
+    private var _rollingDuration as Number = 30;
+
+    // Rolling average buffer
+    private var _powerBuffer as Array<Number?> = [];
+    private var _hrBuffer as Array<Number?> = [];
+    private var _bufferSize as Number = 30;
+
+    // Round (lap) accumulators
+    private var _roundPowerSum as Float = 0.0f;
+    private var _roundHrSum as Float = 0.0f;
+    private var _roundSamples as Number = 0;
+
+    function initialize() {
+        DataField.initialize();
+        loadSettings();
+    }
+
+    function loadSettings() as Void {
+        _mode = (Storage.getValue("mode") as Number?) != null ? Storage.getValue("mode") as Number : 0;
+        var dur = Storage.getValue("rollingDuration") as Number?;
+        _rollingDuration = dur != null ? dur : 30;
+        _bufferSize = _rollingDuration;
+        _powerBuffer = new Array<Number?>[0];
+        _hrBuffer = new Array<Number?>[0];
+    }
+
+    function onTimerLap() as Void {
+        _roundPowerSum = 0.0f;
+        _roundHrSum = 0.0f;
+        _roundSamples = 0;
+    }
+
+    function compute(info as Activity.Info) as Void {
+        // Reload settings in case they changed
+        _mode = (Storage.getValue("mode") as Number?) != null ? Storage.getValue("mode") as Number : 0;
+        if (_mode == MODE_ROLLING_AVG) {
+            var newDuration = (Storage.getValue("rollingDuration") as Number?) != null ? Storage.getValue("rollingDuration") as Number : 30;
+            if (newDuration != _rollingDuration) {
+                _rollingDuration = newDuration;
+                _bufferSize = _rollingDuration;
+                _powerBuffer = new Array<Number?>[0];
+                _hrBuffer = new Array<Number?>[0];
+            }
+        }
+
+        var power = info.currentPower;
+        var heartRate = info.currentHeartRate;
+
+        switch (_mode) {
+            case MODE_CURRENT:
+                if (power != null && heartRate != null && heartRate > 0) {
+                    _ratio = power.toFloat() / heartRate.toFloat();
+                } else {
+                    _ratio = 0.0f;
+                }
+                break;
+
+            case MODE_WORKOUT_AVG:
+                var avgPower = info.averagePower;
+                var avgHr = info.averageHeartRate;
+                if (avgPower != null && avgHr != null && avgHr > 0) {
+                    _ratio = avgPower.toFloat() / avgHr.toFloat();
+                } else {
+                    _ratio = 0.0f;
+                }
+                break;
+
+            case MODE_ROUND_AVG:
+                if (power != null && heartRate != null && heartRate > 0) {
+                    _roundPowerSum += power.toFloat();
+                    _roundHrSum += heartRate.toFloat();
+                    _roundSamples++;
+                }
+                if (_roundSamples > 0 && _roundHrSum > 0.0f) {
+                    _ratio = (_roundPowerSum / _roundSamples) /
+                             (_roundHrSum / _roundSamples);
+                } else {
+                    _ratio = 0.0f;
+                }
+                break;
+
+            case MODE_ROLLING_AVG:
+                _powerBuffer.add(power);
+                _hrBuffer.add(heartRate);
+                if (_powerBuffer.size() > _bufferSize) {
+                    _powerBuffer = _powerBuffer.slice(1, null) as Array<Number?>;
+                    _hrBuffer = _hrBuffer.slice(1, null) as Array<Number?>;
+                }
+                var sumPower = 0.0f;
+                var sumHr = 0.0f;
+                var count = 0;
+                for (var i = 0; i < _powerBuffer.size(); i++) {
+                    var p = _powerBuffer[i];
+                    var h = _hrBuffer[i];
+                    if (p != null && h != null && h > 0) {
+                        sumPower += p.toFloat();
+                        sumHr += h.toFloat();
+                        count++;
+                    }
+                }
+                if (count > 0 && sumHr > 0.0f) {
+                    _ratio = (sumPower / count) / (sumHr / count);
+                } else {
+                    _ratio = 0.0f;
+                }
+                break;
+        }
+    }
+
+    function onUpdate(dc as Graphics.Dc) as Void {
+        var bgColor = getBackgroundColor();
+        var fgColor = (bgColor == Graphics.COLOR_BLACK)
+            ? Graphics.COLOR_WHITE
+            : Graphics.COLOR_BLACK;
+
+        dc.setColor(bgColor, bgColor);
+        dc.clear();
+
+        // Draw label
+        var label = "PW/HR";
+        switch (_mode) {
+            case MODE_WORKOUT_AVG:
+                label = "PW/HR \u00D8";
+                break;
+            case MODE_ROUND_AVG:
+                label = "PW/HR " + WatchUi.loadResource(Rez.Strings.labelRound);
+                break;
+            case MODE_ROLLING_AVG:
+                label = "PW/HR " + _rollingDuration + "s";
+                break;
+        }
+        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(dc.getWidth() / 2, 2, Graphics.FONT_XTINY, label,
+            Graphics.TEXT_JUSTIFY_CENTER);
+
+        // Draw value
+        var valueText = _ratio > 0.0f ? _ratio.format("%.2f") : "---";
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_LARGE, valueText,
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+    }
+}

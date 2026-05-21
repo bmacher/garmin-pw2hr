@@ -1,0 +1,10 @@
+<strings>
+    <string id="AppName">Pw/Hr Ratio</string>
+    <string id="modeTitle">Calculation Mode</string>
+    <string id="modeCurrent">Current</string>
+    <string id="modeWorkoutAvg">Workout Average</string>
+    <string id="modeRoundAvg">Round Average</string>
+    <string id="modeRollingAvg">Rolling Average</string>
+    <string id="rollingDurationTitle">Rolling Avg Duration (sec)</string>
+    <string id="labelRound">ROUND</string>
+</strings>

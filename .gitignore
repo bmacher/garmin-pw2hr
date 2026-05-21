@@ -1,0 +1,17 @@
+# Build output
+bin/
+
+# IDE
+.project
+.settings/
+.externalToolBuilders/
+.vscode/*
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Developer key
+developer_key.der
