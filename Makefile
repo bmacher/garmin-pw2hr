@@ -24,8 +24,8 @@ release:
 	echo "Bumping $$current → $$new"; \
 	sed -i '' "s/version=\"$$current\"/version=\"$$new\"/" manifest.xml; \
 	git add manifest.xml; \
-	git commit -m "release: v$$new"; \
-	git tag -a "v$$new" -m "release v$$new"; \
+	git commit -m "release: $$new"; \
+	git tag -a "$$new" -m "release $$new"; \
 	echo ""; \
-	echo "✅ Version bumped to $$new and tagged v$$new"; \
+	echo "✅ Version bumped to $$new and tagged $$new"; \
 	echo "   Run 'git push && git push --tags' to publish."
