@@ -147,28 +147,28 @@ class Pw2HrView extends WatchUi.DataField {
 
         if (useIcon) {
             // Measure text to position lightning bolt before it
-            var labelWidth = dc.getTextWidthInPixels(label, Graphics.FONT_XTINY);
+            var labelWidth = dc.getTextWidthInPixels(label, Graphics.FONT_SMALL);
             var labelX = dc.getWidth() / 2;
             var labelStartX = labelX - labelWidth / 2;
 
             // Draw lightning bolt polygon
             var bx = labelStartX - 8;
-            var by = 6;
+            var by = 7;
             var pts = [[bx + 3, by], [bx + 1, by + 3], [bx + 3, by + 3],
                        [bx, by + 6], [bx + 4, by + 3], [bx + 2, by + 3],
                        [bx + 5, by]];
             dc.fillPolygon(pts as Lang.Array< Lang.Array >);
 
-            dc.drawText(labelX, 5, Graphics.FONT_XTINY, label,
+            dc.drawText(labelX, 5, Graphics.FONT_SMALL, label,
                 Graphics.TEXT_JUSTIFY_CENTER);
         } else {
-            dc.drawText(dc.getWidth() / 2, 5, Graphics.FONT_XTINY, label,
+            dc.drawText(dc.getWidth() / 2, 5, Graphics.FONT_SMALL, label,
                 Graphics.TEXT_JUSTIFY_CENTER);
         }
 
         // Draw value
         var valueText = _ratio > 0.0f ? _ratio.format("%.2f") : "--";
-        dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_LARGE, valueText,
+        dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2 + 11, Graphics.FONT_NUMBER_MEDIUM, valueText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 }
