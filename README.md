@@ -2,6 +2,8 @@
 
 > A data field for Garmin Edge cycling computers that displays your **power-to-heart-rate ratio** — a simple metric to track your cycling efficiency in real time.
 
+![Screenshot](screenshot.png)
+
 ## Features
 
 - **4 calculation modes**: Current, Workout Average, Lap Average, Rolling Average
@@ -70,4 +72,10 @@ Settings can be changed via **Garmin Connect Mobile** or on-device via the setti
 - **Calculation Mode** — Current, Workout Average, Lap Average, Rolling Average
 - **Rolling Avg Duration** — 5–300 seconds (default: 30s)
 - **Label Style** — Text (`PW/HR`) or Icon (`ϟ/♥`)
+
+---
+
+<p align="center">
+  <img src="icon_store.png" alt="Pw/Hr Logo" width="128" />
+</p>
 
