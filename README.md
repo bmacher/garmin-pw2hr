@@ -1,4 +1,5 @@
 [![CI](https://github.com/bmacher/garmin-pw2hr/actions/workflows/ci.yml/badge.svg)](https://github.com/bmacher/garmin-pw2hr/actions/workflows/ci.yml)
+[![version](https://img.shields.io/badge/dynamic/xml?url=https://raw.githubusercontent.com/bmacher/garmin-pw2hr/master/manifest.xml&query=//*[local-name()='application']/@version&label=version)](https://github.com/bmacher/garmin-pw2hr/releases/latest)
 
 # Pw/Hr Data Field for Garmin Connect IQ
 
