@@ -6,7 +6,7 @@
 
 > A data field for Garmin Edge cycling computers that displays your **power-to-heart-rate ratio** — a simple metric to track your cycling efficiency in real time.
 
-<img src="screenshot.png" alt="Screenshot" width="253" /> <img src="screenshot-10-data-fields.png" alt="Screenshot with 10 data fields" width="253" />
+<img src="assets/screenshot.png" alt="Screenshot" width="253" /> <img src="assets/screenshot-10-data-fields.png" alt="Screenshot with 10 data fields" width="253" />
 
 ## Features
 
@@ -80,7 +80,7 @@ Settings can be changed via **Garmin Connect Mobile** or on-device via the setti
 ---
 
 <p align="center">
-  <img src="icon_store.png" alt="Pw/Hr Logo" width="128" />
+  <img src="assets/icon_store.png" alt="Pw/Hr Logo" width="128" />
   <br />
   &copy; 2026 Benjamin Macher
 </p>
