@@ -131,26 +131,41 @@ class Pw2HrRatioView extends WatchUi.DataField {
         dc.setColor(bgColor, bgColor);
         dc.clear();
 
-        // Draw label
-        var label = "PW/HR";
+        // Draw label with heart
+        var label = "\u2665 PW/HR";
         switch (_mode) {
             case MODE_WORKOUT_AVG:
-                label = "PW/HR \u00D8";
+                label = "\u2665 PW/HR \u00D8";
                 break;
             case MODE_ROUND_AVG:
-                label = "PW/HR " + WatchUi.loadResource(Rez.Strings.labelRound);
+                label = "\u2665 PW/HR " + WatchUi.loadResource(Rez.Strings.labelRound);
                 break;
             case MODE_ROLLING_AVG:
-                label = "PW/HR " + _rollingDuration + "s";
+                label = "\u2665 PW/HR " + _rollingDuration + "s";
                 break;
         }
-        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(dc.getWidth() / 2, 2, Graphics.FONT_XTINY, label,
+
+        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
+
+        // Measure text to position lightning bolt before it
+        var labelWidth = dc.getTextWidthInPixels(label, Graphics.FONT_XTINY);
+        var labelX = dc.getWidth() / 2;
+        var labelStartX = labelX - labelWidth / 2;
+
+        // Draw lightning bolt polygon
+        var bx = labelStartX - 8;
+        var by = 6;
+        var pts = [[bx + 3, by], [bx + 1, by + 3], [bx + 3, by + 3],
+                   [bx, by + 6], [bx + 4, by + 3], [bx + 2, by + 3],
+                   [bx + 5, by]];
+        dc.fillPolygon(pts as Lang.Array< Lang.Array >);
+
+        // Draw the text label
+        dc.drawText(labelX, 5, Graphics.FONT_XTINY, label,
             Graphics.TEXT_JUSTIFY_CENTER);
 
         // Draw value
         var valueText = _ratio > 0.0f ? _ratio.format("%.2f") : "---";
-        dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
         dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_LARGE, valueText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
