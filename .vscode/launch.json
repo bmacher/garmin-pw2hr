@@ -21,6 +21,13 @@
             "name": "Run on Edge 540",
             "device": "edge540",
             "stopAtLaunch": false
+        },
+        {
+            "type": "monkeyc",
+            "request": "launch",
+            "name": "Run Tests",
+            "device": "edge840",
+            "runTests": true
         }
     ]
 }

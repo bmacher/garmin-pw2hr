@@ -8,7 +8,7 @@ class Pw2HrView extends WatchUi.DataField {
 
     private const MODE_CURRENT = 0;
     private const MODE_WORKOUT_AVG = 1;
-    private const MODE_ROUND_AVG = 2;
+    private const MODE_LAP_AVG = 2;
     private const MODE_ROLLING_AVG = 3;
 
     private var _ratio as Float = 0.0f;
@@ -21,10 +21,10 @@ class Pw2HrView extends WatchUi.DataField {
     private var _hrBuffer as Array<Number?> = [];
     private var _bufferSize as Number = 30;
 
-    // Round (lap) accumulators
-    private var _roundPowerSum as Float = 0.0f;
-    private var _roundHrSum as Float = 0.0f;
-    private var _roundSamples as Number = 0;
+    // Lap accumulators
+    private var _lapPowerSum as Float = 0.0f;
+    private var _lapHrSum as Float = 0.0f;
+    private var _lapSamples as Number = 0;
 
     function initialize() {
         DataField.initialize();
@@ -42,9 +42,9 @@ class Pw2HrView extends WatchUi.DataField {
     }
 
     function onTimerLap() as Void {
-        _roundPowerSum = 0.0f;
-        _roundHrSum = 0.0f;
-        _roundSamples = 0;
+        _lapPowerSum = 0.0f;
+        _lapHrSum = 0.0f;
+        _lapSamples = 0;
     }
 
     function compute(info as Activity.Info) as Void {
@@ -66,35 +66,22 @@ class Pw2HrView extends WatchUi.DataField {
 
         switch (_mode) {
             case MODE_CURRENT:
-                if (power != null && heartRate != null && heartRate > 0) {
-                    _ratio = power.toFloat() / heartRate.toFloat();
-                } else {
-                    _ratio = 0.0f;
-                }
+                _ratio = Pw2HrCalc.computeRatio(power, heartRate);
                 break;
 
             case MODE_WORKOUT_AVG:
                 var avgPower = info.averagePower;
                 var avgHr = info.averageHeartRate;
-                if (avgPower != null && avgHr != null && avgHr > 0) {
-                    _ratio = avgPower.toFloat() / avgHr.toFloat();
-                } else {
-                    _ratio = 0.0f;
-                }
+                _ratio = Pw2HrCalc.computeRatio(avgPower, avgHr);
                 break;
 
-            case MODE_ROUND_AVG:
+            case MODE_LAP_AVG:
                 if (power != null && heartRate != null && heartRate > 0) {
-                    _roundPowerSum += power.toFloat();
-                    _roundHrSum += heartRate.toFloat();
-                    _roundSamples++;
+                    _lapPowerSum += power.toFloat();
+                    _lapHrSum += heartRate.toFloat();
+                    _lapSamples++;
                 }
-                if (_roundSamples > 0 && _roundHrSum > 0.0f) {
-                    _ratio = (_roundPowerSum / _roundSamples) /
-                             (_roundHrSum / _roundSamples);
-                } else {
-                    _ratio = 0.0f;
-                }
+                _ratio = Pw2HrCalc.computeAccumulatedRatio(_lapPowerSum, _lapHrSum, _lapSamples);
                 break;
 
             case MODE_ROLLING_AVG:
@@ -104,23 +91,7 @@ class Pw2HrView extends WatchUi.DataField {
                     _powerBuffer = _powerBuffer.slice(1, null) as Array<Number?>;
                     _hrBuffer = _hrBuffer.slice(1, null) as Array<Number?>;
                 }
-                var sumPower = 0.0f;
-                var sumHr = 0.0f;
-                var count = 0;
-                for (var i = 0; i < _powerBuffer.size(); i++) {
-                    var p = _powerBuffer[i];
-                    var h = _hrBuffer[i];
-                    if (p != null && h != null && h > 0) {
-                        sumPower += p.toFloat();
-                        sumHr += h.toFloat();
-                        count++;
-                    }
-                }
-                if (count > 0 && sumHr > 0.0f) {
-                    _ratio = (sumPower / count) / (sumHr / count);
-                } else {
-                    _ratio = 0.0f;
-                }
+                _ratio = Pw2HrCalc.computeRollingRatio(_powerBuffer, _hrBuffer);
                 break;
         }
     }
@@ -144,8 +115,8 @@ class Pw2HrView extends WatchUi.DataField {
                 case MODE_WORKOUT_AVG:
                     label = "/ \u2665 \u00D8";
                     break;
-                case MODE_ROUND_AVG:
-                    label = "/ \u2665 " + WatchUi.loadResource(Rez.Strings.labelRound);
+                case MODE_LAP_AVG:
+                    label = "/ \u2665 " + WatchUi.loadResource(Rez.Strings.labelLap);
                     break;
                 case MODE_ROLLING_AVG:
                     label = "/ \u2665 " + _rollingDuration + "s";
@@ -160,8 +131,8 @@ class Pw2HrView extends WatchUi.DataField {
                 case MODE_WORKOUT_AVG:
                     label = "PW/HR \u00D8";
                     break;
-                case MODE_ROUND_AVG:
-                    label = "PW/HR " + WatchUi.loadResource(Rez.Strings.labelRound);
+                case MODE_LAP_AVG:
+                    label = "PW/HR " + WatchUi.loadResource(Rez.Strings.labelLap);
                     break;
                 case MODE_ROLLING_AVG:
                     label = "PW/HR " + _rollingDuration + "s";

@@ -34,7 +34,7 @@ class SettingsDelegate extends WatchUi.BehaviorDelegate {
         var menu = new WatchUi.Menu2({:title => "Settings"});
         menu.addItem(new WatchUi.ToggleMenuItem("Current", null, "mode_0", mode == 0, null));
         menu.addItem(new WatchUi.ToggleMenuItem("Workout Average", null, "mode_1", mode == 1, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Round Average", null, "mode_2", mode == 2, null));
+        menu.addItem(new WatchUi.ToggleMenuItem("Lap Average", null, "mode_2", mode == 2, null));
         menu.addItem(new WatchUi.ToggleMenuItem("Rolling Average", null, "mode_3", mode == 3, null));
         menu.addItem(new WatchUi.ToggleMenuItem("Label: Icon", null, "labelStyle", labelStyle == 1, null));
 

@@ -3,11 +3,11 @@
     <string id="modeTitle">Calculation Mode</string>
     <string id="modeCurrent">Current</string>
     <string id="modeWorkoutAvg">Workout Average</string>
-    <string id="modeRoundAvg">Round Average</string>
+    <string id="modeLapAvg">Lap Average</string>
     <string id="modeRollingAvg">Rolling Average</string>
     <string id="rollingDurationTitle">Rolling Avg Duration (sec)</string>
     <string id="labelStyleTitle">Label Style</string>
     <string id="labelStyleText">Text (PW/HR)</string>
     <string id="labelStyleIcon">Icon</string>
-    <string id="labelRound">LAP</string>
+    <string id="labelLap">LAP</string>
 </strings>

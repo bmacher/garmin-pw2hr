@@ -2,7 +2,7 @@
     xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
 
     <properties>
-        <!-- 0=Current, 1=Workout Average, 2=Round Average, 3=Rolling Average -->
+        <!-- 0=Current, 1=Workout Average, 2=Lap Average, 3=Rolling Average -->
         <property id="mode" type="number">0</property>
         <!-- Duration in seconds for rolling average -->
         <property id="rollingDuration" type="number">30</property>
@@ -15,7 +15,7 @@
             <settingConfig type="list">
                 <listEntry value="0">@Strings.modeCurrent</listEntry>
                 <listEntry value="1">@Strings.modeWorkoutAvg</listEntry>
-                <listEntry value="2">@Strings.modeRoundAvg</listEntry>
+                <listEntry value="2">@Strings.modeLapAvg</listEntry>
                 <listEntry value="3">@Strings.modeRollingAvg</listEntry>
             </settingConfig>
         </setting>
