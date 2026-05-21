@@ -6,6 +6,8 @@
         <property id="mode" type="number">0</property>
         <!-- Duration in seconds for rolling average -->
         <property id="rollingDuration" type="number">30</property>
+        <!-- 0=Text (PW/HR), 1=Icon (ϟ♥) -->
+        <property id="labelStyle" type="number">0</property>
     </properties>
 
     <settings>
@@ -20,6 +22,13 @@
 
         <setting propertyKey="@Properties.rollingDuration" title="@Strings.rollingDurationTitle">
             <settingConfig type="numeric" min="5" max="300" />
+        </setting>
+
+        <setting propertyKey="@Properties.labelStyle" title="@Strings.labelStyleTitle">
+            <settingConfig type="list">
+                <listEntry value="0">@Strings.labelStyleText</listEntry>
+                <listEntry value="1">@Strings.labelStyleIcon</listEntry>
+            </settingConfig>
         </setting>
     </settings>
 

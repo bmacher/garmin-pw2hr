@@ -16,6 +16,9 @@ class Pw2HrRatioApp extends Application.AppBase {
         if (Storage.getValue("rollingDuration") == null) {
             Storage.setValue("rollingDuration", 30);
         }
+        if (Storage.getValue("labelStyle") == null) {
+            Storage.setValue("labelStyle", 0);
+        }
     }
 
     function getInitialView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {

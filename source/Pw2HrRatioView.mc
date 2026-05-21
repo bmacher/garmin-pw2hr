@@ -14,6 +14,7 @@ class Pw2HrRatioView extends WatchUi.DataField {
     private var _ratio as Float = 0.0f;
     private var _mode as Number = 0;
     private var _rollingDuration as Number = 30;
+    private var _labelStyle as Number = 0; // 0=text, 1=icon
 
     // Rolling average buffer
     private var _powerBuffer as Array<Number?> = [];
@@ -34,6 +35,7 @@ class Pw2HrRatioView extends WatchUi.DataField {
         _mode = (Storage.getValue("mode") as Number?) != null ? Storage.getValue("mode") as Number : 0;
         var dur = Storage.getValue("rollingDuration") as Number?;
         _rollingDuration = dur != null ? dur : 30;
+        _labelStyle = (Storage.getValue("labelStyle") as Number?) != null ? Storage.getValue("labelStyle") as Number : 0;
         _bufferSize = _rollingDuration;
         _powerBuffer = new Array<Number?>[0];
         _hrBuffer = new Array<Number?>[0];
@@ -48,6 +50,7 @@ class Pw2HrRatioView extends WatchUi.DataField {
     function compute(info as Activity.Info) as Void {
         // Reload settings in case they changed
         _mode = (Storage.getValue("mode") as Number?) != null ? Storage.getValue("mode") as Number : 0;
+        _labelStyle = (Storage.getValue("labelStyle") as Number?) != null ? Storage.getValue("labelStyle") as Number : 0;
         if (_mode == MODE_ROLLING_AVG) {
             var newDuration = (Storage.getValue("rollingDuration") as Number?) != null ? Storage.getValue("rollingDuration") as Number : 30;
             if (newDuration != _rollingDuration) {
@@ -131,38 +134,66 @@ class Pw2HrRatioView extends WatchUi.DataField {
         dc.setColor(bgColor, bgColor);
         dc.clear();
 
-        // Draw label with heart
-        var label = "\u2665 PW/HR";
-        switch (_mode) {
-            case MODE_WORKOUT_AVG:
-                label = "\u2665 PW/HR \u00D8";
-                break;
-            case MODE_ROUND_AVG:
-                label = "\u2665 PW/HR " + WatchUi.loadResource(Rez.Strings.labelRound);
-                break;
-            case MODE_ROLLING_AVG:
-                label = "\u2665 PW/HR " + _rollingDuration + "s";
-                break;
+        // Draw label
+        var label = "";
+        var useIcon = (_labelStyle == 1);
+
+        if (useIcon) {
+            // Icon mode: ♥ + mode suffix
+            switch (_mode) {
+                case MODE_WORKOUT_AVG:
+                    label = "/ \u2665 \u00D8";
+                    break;
+                case MODE_ROUND_AVG:
+                    label = "/ \u2665 " + WatchUi.loadResource(Rez.Strings.labelRound);
+                    break;
+                case MODE_ROLLING_AVG:
+                    label = "/ \u2665 " + _rollingDuration + "s";
+                    break;
+                default:
+                    label = "/ \u2665";
+                    break;
+            }
+        } else {
+            // Text mode: PW/HR + mode suffix
+            switch (_mode) {
+                case MODE_WORKOUT_AVG:
+                    label = "PW/HR \u00D8";
+                    break;
+                case MODE_ROUND_AVG:
+                    label = "PW/HR " + WatchUi.loadResource(Rez.Strings.labelRound);
+                    break;
+                case MODE_ROLLING_AVG:
+                    label = "PW/HR " + _rollingDuration + "s";
+                    break;
+                default:
+                    label = "PW/HR";
+                    break;
+            }
         }
 
         dc.setColor(fgColor, Graphics.COLOR_TRANSPARENT);
 
-        // Measure text to position lightning bolt before it
-        var labelWidth = dc.getTextWidthInPixels(label, Graphics.FONT_XTINY);
-        var labelX = dc.getWidth() / 2;
-        var labelStartX = labelX - labelWidth / 2;
+        if (useIcon) {
+            // Measure text to position lightning bolt before it
+            var labelWidth = dc.getTextWidthInPixels(label, Graphics.FONT_XTINY);
+            var labelX = dc.getWidth() / 2;
+            var labelStartX = labelX - labelWidth / 2;
 
-        // Draw lightning bolt polygon
-        var bx = labelStartX - 8;
-        var by = 6;
-        var pts = [[bx + 3, by], [bx + 1, by + 3], [bx + 3, by + 3],
-                   [bx, by + 6], [bx + 4, by + 3], [bx + 2, by + 3],
-                   [bx + 5, by]];
-        dc.fillPolygon(pts as Lang.Array< Lang.Array >);
+            // Draw lightning bolt polygon
+            var bx = labelStartX - 8;
+            var by = 6;
+            var pts = [[bx + 3, by], [bx + 1, by + 3], [bx + 3, by + 3],
+                       [bx, by + 6], [bx + 4, by + 3], [bx + 2, by + 3],
+                       [bx + 5, by]];
+            dc.fillPolygon(pts as Lang.Array< Lang.Array >);
 
-        // Draw the text label
-        dc.drawText(labelX, 5, Graphics.FONT_XTINY, label,
-            Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(labelX, 5, Graphics.FONT_XTINY, label,
+                Graphics.TEXT_JUSTIFY_CENTER);
+        } else {
+            dc.drawText(dc.getWidth() / 2, 5, Graphics.FONT_XTINY, label,
+                Graphics.TEXT_JUSTIFY_CENTER);
+        }
 
         // Draw value
         var valueText = _ratio > 0.0f ? _ratio.format("%.2f") : "---";

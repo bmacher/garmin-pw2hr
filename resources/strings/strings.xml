@@ -6,5 +6,8 @@
     <string id="modeRoundAvg">Round Average</string>
     <string id="modeRollingAvg">Rolling Average</string>
     <string id="rollingDurationTitle">Rolling Avg Duration (sec)</string>
+    <string id="labelStyleTitle">Label Style</string>
+    <string id="labelStyleText">Text (PW/HR)</string>
+    <string id="labelStyleIcon">Icon</string>
     <string id="labelRound">ROUND</string>
 </strings>

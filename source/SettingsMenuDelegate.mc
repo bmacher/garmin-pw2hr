@@ -28,12 +28,15 @@ class SettingsDelegate extends WatchUi.BehaviorDelegate {
     function onMenu() as Boolean {
         var mode = Storage.getValue("mode");
         if (mode == null) { mode = 0; }
+        var labelStyle = Storage.getValue("labelStyle");
+        if (labelStyle == null) { labelStyle = 0; }
 
-        var menu = new WatchUi.Menu2({:title => "Calculation Mode"});
-        menu.addItem(new WatchUi.ToggleMenuItem("Current", null, 0, mode == 0, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Workout Average", null, 1, mode == 1, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Round Average", null, 2, mode == 2, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Rolling Average", null, 3, mode == 3, null));
+        var menu = new WatchUi.Menu2({:title => "Settings"});
+        menu.addItem(new WatchUi.ToggleMenuItem("Current", null, "mode_0", mode == 0, null));
+        menu.addItem(new WatchUi.ToggleMenuItem("Workout Average", null, "mode_1", mode == 1, null));
+        menu.addItem(new WatchUi.ToggleMenuItem("Round Average", null, "mode_2", mode == 2, null));
+        menu.addItem(new WatchUi.ToggleMenuItem("Rolling Average", null, "mode_3", mode == 3, null));
+        menu.addItem(new WatchUi.ToggleMenuItem("Label: Icon", null, "labelStyle", labelStyle == 1, null));
 
         WatchUi.pushView(menu, new SettingsMenuDelegate(), WatchUi.SLIDE_IMMEDIATE);
         return true;
@@ -48,8 +51,17 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(menuItem as WatchUi.MenuItem) as Void {
         var id = menuItem.getId();
-        if (id instanceof Number) {
-            Storage.setValue("mode", id as Number);
+        if (id instanceof Lang.String) {
+            var idStr = id as String;
+            if (idStr.equals("labelStyle")) {
+                var current = Storage.getValue("labelStyle");
+                Storage.setValue("labelStyle", (current == 1) ? 0 : 1);
+            } else if (idStr.substring(0, 5).equals("mode_")) {
+                var modeNum = idStr.substring(5, 6).toNumber();
+                if (modeNum != null) {
+                    Storage.setValue("mode", modeNum);
+                }
+            }
         }
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
     }
