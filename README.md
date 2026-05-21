@@ -1,6 +1,6 @@
-# Pw/Hr Data Field for Garmin Connect IQ
-
 [![CI](https://github.com/bmacher/garmin-pw2hr/actions/workflows/ci.yml/badge.svg)](https://github.com/bmacher/garmin-pw2hr/actions/workflows/ci.yml)
+
+# Pw/Hr Data Field for Garmin Connect IQ
 
 > A data field for Garmin Edge cycling computers that displays your **power-to-heart-rate ratio** — a simple metric to track your cycling efficiency in real time.
 
