@@ -3,7 +3,7 @@ MONKEYC := $(SDK_HOME)/bin/monkeyc
 JAVA_HOME := /opt/homebrew/opt/openjdk@17
 KEY := developer_key.der
 
-.PHONY: release build
+.PHONY: release build dev-build
 
 release:
 	@current=$$(grep -o 'version="[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*"' manifest.xml | head -1 | sed 's/version="//;s/"//'); \
@@ -61,3 +61,12 @@ build:
 	git stash pop -q 2>/dev/null || true; \
 	echo ""; \
 	echo "✅ Built release/Pw2Hr-$$selected.iq"
+
+dev-build:
+	@echo "Building dev version..."; \
+	sed -i '' 's|<string id="AppName">Pw/Hr</string>|<string id="AppName">Pw/Hr (dev)</string>|' resources/strings/strings.xml; \
+	mkdir -p dev; \
+	JAVA_HOME="$(JAVA_HOME)" "$(MONKEYC)" -f monkey.jungle -o dev/Pw2Hr-dev.prg -y "$(KEY)" -d edge840; \
+	sed -i '' 's|<string id="AppName">Pw/Hr (dev)</string>|<string id="AppName">Pw/Hr</string>|' resources/strings/strings.xml; \
+	echo ""; \
+	echo "✅ Built dev/Pw2Hr-dev.prg"

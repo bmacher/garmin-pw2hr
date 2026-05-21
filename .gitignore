@@ -16,6 +16,9 @@ Thumbs.db
 # Release output
 release/
 
+# Dev builds
+dev/
+
 # Developer key
 developer_key.der
 developer_key

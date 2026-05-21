@@ -63,10 +63,16 @@ monkeyc -f monkey.jungle -o bin/Pw2Hr.iq -e -y developer_key.der -r
 
 ### Install on Device
 
+To create a dev build that shows as **"Pw/Hr (dev)"** on the device (so it can run alongside the store version):
+
+```bash
+make dev-build
+```
+
 Connect your Garmin Edge via USB and copy the `.prg` file:
 
 ```bash
-cp bin/Pw2Hr.prg /Volumes/GARMIN/GARMIN/APPS/
+cp dev/Pw2Hr-dev.prg /Volumes/GARMIN/GARMIN/APPS/
 ```
 
 > **Note:** To uninstall a manually deployed data field, use the Connect IQ app on your device (not USB). The `.prg` file is managed internally after first use.
