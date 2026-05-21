@@ -167,7 +167,7 @@ class Pw2HrView extends WatchUi.DataField {
         }
 
         // Draw value
-        var valueText = _ratio > 0.0f ? _ratio.format("%.2f") : "---";
+        var valueText = _ratio > 0.0f ? _ratio.format("%.2f") : "--";
         dc.drawText(dc.getWidth() / 2, dc.getHeight() / 2, Graphics.FONT_LARGE, valueText,
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
