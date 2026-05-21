@@ -2,7 +2,7 @@
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
     <iq:application
         entry="Pw2HrApp"
-        id="e19acaf8-6957-4681-bfe9-4df86bf64eba"
+        id="634ca4dc-9ed8-47cf-be9b-6290e82c72ea"
         name="@Strings.AppName"
         launcherIcon="@Drawables.LauncherIcon"
         type="datafield"

@@ -5,7 +5,7 @@
 ## Features
 
 - **4 calculation modes**: Current, Workout Average, Lap Average, Rolling Average
-- **Configurable rolling duration** (default: 30s)
+- **Configurable rolling duration** (5–300s, default: 30s)
 - **Two label styles**: Text (`PW/HR`) or Icon (`ϟ/♥`)
 - **Localization**: English and German
 - **Supported devices**: Edge 1050, Edge 840, Edge 540
@@ -26,6 +26,7 @@
 - [Connect IQ SDK](https://developer.garmin.com/connect-iq/sdk/) (9.1.0+)
 - Java 17 (e.g. `brew install openjdk@17`)
 - [VS Code](https://code.visualstudio.com/) with the [Monkey C extension](https://marketplace.visualstudio.com/items?itemName=garmin.monkey-c)
+- **Developer Key** (`developer_key.der`) — required for building and signing the app. This file is not checked into the repo. Store it safely (e.g. password manager or encrypted backup) — losing it means you cannot update the app on the Connect IQ Store.
 
 ### Build
 
@@ -67,6 +68,6 @@ cp bin/Pw2Hr.prg /Volumes/GARMIN/GARMIN/APPS/
 Settings can be changed via **Garmin Connect Mobile** or on-device via the settings menu:
 
 - **Calculation Mode** — Current, Workout Average, Lap Average, Rolling Average
-- **Rolling Avg Duration** — 5–300 seconds (default: 30)
+- **Rolling Avg Duration** — 5–300 seconds (default: 30s)
 - **Label Style** — Text (`PW/HR`) or Icon (`ϟ/♥`)
 
