@@ -3,7 +3,7 @@ import Toybox.Application.Storage;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-class Pw2HrRatioApp extends Application.AppBase {
+class Pw2HrApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
@@ -22,7 +22,7 @@ class Pw2HrRatioApp extends Application.AppBase {
     }
 
     function getInitialView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {
-        return [new Pw2HrRatioView()];
+        return [new Pw2HrView()];
     }
 
     function getSettingsView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] or Null {

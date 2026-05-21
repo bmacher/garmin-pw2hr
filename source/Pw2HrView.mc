@@ -4,7 +4,7 @@ import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-class Pw2HrRatioView extends WatchUi.DataField {
+class Pw2HrView extends WatchUi.DataField {
 
     private const MODE_CURRENT = 0;
     private const MODE_WORKOUT_AVG = 1;

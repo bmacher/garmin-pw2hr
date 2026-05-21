@@ -1,4 +1,4 @@
-# Pw2HrRatio Data Field for Garmin Connect IQ
+# Pw2Hr Data Field for Garmin Connect IQ
 
 ## Labels
 
