@@ -54,6 +54,14 @@ monkeydo bin/Pw2HrTest.prg edge840 -t
 monkeyc -f monkey.jungle -o bin/Pw2Hr.iq -e -y developer_key.der -r
 ```
 
+### Install on Device
+
+Connect your Garmin Edge via USB and copy the `.prg` file:
+
+```bash
+cp bin/Pw2Hr.prg /Volumes/GARMIN/GARMIN/APPS/
+```
+
 ## Settings
 
 Settings can be changed via **Garmin Connect Mobile** or on-device via the settings menu:
