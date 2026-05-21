@@ -151,12 +151,12 @@ class Pw2HrView extends WatchUi.DataField {
             var labelX = dc.getWidth() / 2;
             var labelStartX = labelX - labelWidth / 2;
 
-            // Draw lightning bolt polygon
-            var bx = labelStartX - 8;
-            var by = 7;
-            var pts = [[bx + 3, by], [bx + 1, by + 3], [bx + 3, by + 3],
-                       [bx, by + 6], [bx + 4, by + 3], [bx + 2, by + 3],
-                       [bx + 5, by]];
+            // Draw lightning bolt polygon (8x10px)
+            var bx = labelStartX - 12;
+            var by = 6;
+            var pts = [[bx + 5, by], [bx + 1, by + 6], [bx + 5, by + 6],
+                       [bx, by + 10], [bx + 7, by + 5], [bx + 3, by + 5],
+                       [bx + 8, by]];
             dc.fillPolygon(pts as Lang.Array< Lang.Array >);
 
             dc.drawText(labelX, 5, Graphics.FONT_SMALL, label,

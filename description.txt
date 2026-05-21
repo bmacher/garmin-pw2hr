@@ -1,0 +1,24 @@
+A data field for Garmin Edge cycling computers that displays your power-to-heart-rate ratio — a simple metric to track your cycling efficiency in real time.
+
+Features:
+
+  - 4 calculation modes: Current, Workout Average, Lap Average, Rolling Average
+  - Configurable rolling average duration (5-300s, default: 30s)
+  - Two label styles: Text (PW/HR) or Icon
+  - English and German localization
+
+Settings can be changed via the Connect IQ app on your phone or directly on the device via the settings menu.
+
+__________________________
+Beschreibung (Deutsch):
+
+Ein Datenfeld fuer Garmin Edge Radcomputer, das das Verhaeltnis von Leistung zu Herzfrequenz anzeigt — eine einfache Kennzahl zur Ueberwachung der Effizienz in Echtzeit.
+
+Funktionen:
+
+  - 4 Berechnungsmodi: Aktuell, Trainings-Durchschnitt, Runden-Durchschnitt, Gleitender Durchschnitt
+  - Konfigurierbare Dauer des gleitenden Durchschnitts (5-300s, Standard: 30s)
+  - Zwei Label-Stile: Text (PW/HR) oder Symbol
+  - Englisch und Deutsch
+
+Einstellungen koennen ueber die Connect IQ App auf dem Smartphone oder direkt am Geraet ueber das Einstellungsmenue geaendert werden.

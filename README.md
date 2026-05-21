@@ -69,6 +69,8 @@ Connect your Garmin Edge via USB and copy the `.prg` file:
 cp bin/Pw2Hr.prg /Volumes/GARMIN/GARMIN/APPS/
 ```
 
+> **Note:** To uninstall a manually deployed data field, use the Connect IQ app on your device (not USB). The `.prg` file is managed internally after first use.
+
 ## Settings
 
 Settings can be changed via **Garmin Connect Mobile** or on-device via the settings menu:
