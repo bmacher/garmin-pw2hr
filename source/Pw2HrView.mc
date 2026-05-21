@@ -147,22 +147,22 @@ class Pw2HrView extends WatchUi.DataField {
 
         if (useIcon) {
             // Measure text to position lightning bolt before it
-            var labelWidth = dc.getTextWidthInPixels(label, Graphics.FONT_SMALL);
+            var labelWidth = dc.getTextWidthInPixels(label, Graphics.FONT_MEDIUM);
             var labelX = dc.getWidth() / 2;
             var labelStartX = labelX - labelWidth / 2;
 
-            // Draw lightning bolt polygon (8x10px)
-            var bx = labelStartX - 12;
+            // Draw lightning bolt polygon (10x12px)
+            var bx = labelStartX - 14;
             var by = 6;
-            var pts = [[bx + 5, by], [bx + 1, by + 6], [bx + 5, by + 6],
-                       [bx, by + 10], [bx + 7, by + 5], [bx + 3, by + 5],
-                       [bx + 8, by]];
+            var pts = [[bx + 6, by], [bx + 1, by + 7], [bx + 6, by + 7],
+                       [bx, by + 12], [bx + 9, by + 6], [bx + 4, by + 6],
+                       [bx + 10, by]];
             dc.fillPolygon(pts as Lang.Array< Lang.Array >);
 
-            dc.drawText(labelX, 5, Graphics.FONT_SMALL, label,
+            dc.drawText(labelX, 4, Graphics.FONT_MEDIUM, label,
                 Graphics.TEXT_JUSTIFY_CENTER);
         } else {
-            dc.drawText(dc.getWidth() / 2, 5, Graphics.FONT_SMALL, label,
+            dc.drawText(dc.getWidth() / 2, 4, Graphics.FONT_MEDIUM, label,
                 Graphics.TEXT_JUSTIFY_CENTER);
         }
 
