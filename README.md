@@ -77,5 +77,7 @@ Settings can be changed via **Garmin Connect Mobile** or on-device via the setti
 
 <p align="center">
   <img src="icon_store.png" alt="Pw/Hr Logo" width="128" />
+  <br />
+  &copy; 2026 Benjamin Macher
 </p>
 
