@@ -2,7 +2,7 @@
 
 > A data field for Garmin Edge cycling computers that displays your **power-to-heart-rate ratio** — a simple metric to track your cycling efficiency in real time.
 
-<img src="screenshot.png" alt="Screenshot" width="253" />
+<img src="screenshot.png" alt="Screenshot" width="253" /> <img src="screenshot-10-data-fields.png" alt="Screenshot with 10 data fields" width="253" />
 
 ## Features
 
