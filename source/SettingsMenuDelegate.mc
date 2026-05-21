@@ -26,17 +26,10 @@ class SettingsDelegate extends WatchUi.BehaviorDelegate {
     }
 
     function onMenu() as Boolean {
-        var mode = Storage.getValue("mode");
-        if (mode == null) { mode = 0; }
-        var labelStyle = Storage.getValue("labelStyle");
-        if (labelStyle == null) { labelStyle = 0; }
-
         var menu = new WatchUi.Menu2({:title => "Settings"});
-        menu.addItem(new WatchUi.ToggleMenuItem("Current", null, "mode_0", mode == 0, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Workout Average", null, "mode_1", mode == 1, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Lap Average", null, "mode_2", mode == 2, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Rolling Average", null, "mode_3", mode == 3, null));
-        menu.addItem(new WatchUi.ToggleMenuItem("Label: Icon", null, "labelStyle", labelStyle == 1, null));
+        menu.addItem(new WatchUi.MenuItem("Calculation Mode", null, "mode", null));
+        menu.addItem(new WatchUi.MenuItem("Rolling Duration", null, "rollingDuration", null));
+        menu.addItem(new WatchUi.MenuItem("Label Style", null, "labelStyle", null));
 
         WatchUi.pushView(menu, new SettingsMenuDelegate(), WatchUi.SLIDE_IMMEDIATE);
         return true;
@@ -51,16 +44,80 @@ class SettingsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(menuItem as WatchUi.MenuItem) as Void {
         var id = menuItem.getId();
+        if (!(id instanceof Lang.String)) { return; }
+        var idStr = id as String;
+
+        if (idStr.equals("mode")) {
+            var menu = new WatchUi.Menu2({:title => "Mode"});
+            menu.addItem(new WatchUi.MenuItem("Current", null, "mode_0", null));
+            menu.addItem(new WatchUi.MenuItem("Workout Average", null, "mode_1", null));
+            menu.addItem(new WatchUi.MenuItem("Lap Average", null, "mode_2", null));
+            menu.addItem(new WatchUi.MenuItem("Rolling Average", null, "mode_3", null));
+            WatchUi.pushView(menu, new ModeMenuDelegate(), WatchUi.SLIDE_IMMEDIATE);
+        } else if (idStr.equals("rollingDuration")) {
+            var menu = new WatchUi.Menu2({:title => "Rolling Duration"});
+            menu.addItem(new WatchUi.MenuItem("10s", null, "dur_10", null));
+            menu.addItem(new WatchUi.MenuItem("30s", null, "dur_30", null));
+            menu.addItem(new WatchUi.MenuItem("60s", null, "dur_60", null));
+            menu.addItem(new WatchUi.MenuItem("120s", null, "dur_120", null));
+            menu.addItem(new WatchUi.MenuItem("300s", null, "dur_300", null));
+            WatchUi.pushView(menu, new DurationMenuDelegate(), WatchUi.SLIDE_IMMEDIATE);
+        } else if (idStr.equals("labelStyle")) {
+            var menu = new WatchUi.Menu2({:title => "Label Style"});
+            menu.addItem(new WatchUi.MenuItem("Text (PW/HR)", null, "label_0", null));
+            menu.addItem(new WatchUi.MenuItem("Icon", null, "label_1", null));
+            WatchUi.pushView(menu, new LabelMenuDelegate(), WatchUi.SLIDE_IMMEDIATE);
+        }
+    }
+}
+
+class ModeMenuDelegate extends WatchUi.Menu2InputDelegate {
+    function initialize() { Menu2InputDelegate.initialize(); }
+
+    function onSelect(menuItem as WatchUi.MenuItem) as Void {
+        var id = menuItem.getId();
         if (id instanceof Lang.String) {
             var idStr = id as String;
-            if (idStr.equals("labelStyle")) {
-                var current = Storage.getValue("labelStyle");
-                Storage.setValue("labelStyle", (current == 1) ? 0 : 1);
-            } else if (idStr.substring(0, 5).equals("mode_")) {
+            if (idStr.substring(0, 5).equals("mode_")) {
                 var modeNum = idStr.substring(5, 6).toNumber();
                 if (modeNum != null) {
                     Storage.setValue("mode", modeNum);
                 }
+            }
+        }
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+}
+
+class DurationMenuDelegate extends WatchUi.Menu2InputDelegate {
+    function initialize() { Menu2InputDelegate.initialize(); }
+
+    function onSelect(menuItem as WatchUi.MenuItem) as Void {
+        var id = menuItem.getId();
+        if (id instanceof Lang.String) {
+            var idStr = id as String;
+            if (idStr.substring(0, 4).equals("dur_")) {
+                var dur = idStr.substring(4, idStr.length()).toNumber();
+                if (dur != null) {
+                    Storage.setValue("rollingDuration", dur);
+                }
+            }
+        }
+        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+}
+
+class LabelMenuDelegate extends WatchUi.Menu2InputDelegate {
+    function initialize() { Menu2InputDelegate.initialize(); }
+
+    function onSelect(menuItem as WatchUi.MenuItem) as Void {
+        var id = menuItem.getId();
+        if (id instanceof Lang.String) {
+            var idStr = id as String;
+            if (idStr.equals("label_0")) {
+                Storage.setValue("labelStyle", 0);
+            } else if (idStr.equals("label_1")) {
+                Storage.setValue("labelStyle", 1);
             }
         }
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
