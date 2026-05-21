@@ -53,7 +53,7 @@ jobs:
           Xvfb $DISPLAY -screen 0 1280x1024x24 &
           sleep 2
           simulator &
-          sleep 5
+          sleep 15
           monkeydo bin/test.prg ${{ matrix.device }} -t | tee /tmp/test_result.txt || true
           result=$(tail -1 /tmp/test_result.txt)
           if [[ "$result" == PASSED* ]]; then
