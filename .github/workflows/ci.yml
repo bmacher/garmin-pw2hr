@@ -7,11 +7,59 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        device: [edge840, edge540, edge1050]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run unit tests
-        uses: matco/action-connectiq-tester@v1
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
         with:
-          device: edge840
+          distribution: temurin
+          java-version: 17
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libwebkit2gtk-4.0-37 libusb-1.0-0 libsm6 xvfb
+
+      - name: Download Connect IQ SDK
+        run: |
+          SDK_URL=$(curl -s https://developer.garmin.com/downloads/connect-iq/sdks/sdks.json | \
+            jq -r '.[] | select(.version=="9.1.0") | .linux')
+          wget -q "https://developer.garmin.com/downloads/connect-iq/sdks/$SDK_URL" -O /tmp/sdk.zip
+          mkdir -p $HOME/connectiq-sdk
+          unzip -q /tmp/sdk.zip -d $HOME/connectiq-sdk
+          echo "$HOME/connectiq-sdk/bin" >> $GITHUB_PATH
+
+      - name: Install device files
+        run: |
+          mkdir -p $HOME/.Garmin/ConnectIQ/Devices
+          unzip -q .ci/devices/edge-devices.zip -d $HOME/.Garmin/ConnectIQ/Devices
+
+      - name: Generate test key
+        run: |
+          openssl genrsa 4096 2>/dev/null | \
+            openssl pkcs8 -topk8 -nocrypt -outform DER -out test_key.der
+
+      - name: Build tests
+        run: monkeyc -f monkey.jungle -o bin/test.prg -d ${{ matrix.device }} -y test_key.der -t
+
+      - name: Run tests
+        run: |
+          export DISPLAY=:1
+          Xvfb $DISPLAY -screen 0 1280x1024x24 &
+          sleep 2
+          simulator &
+          sleep 5
+          monkeydo bin/test.prg ${{ matrix.device }} -t | tee /tmp/test_result.txt || true
+          result=$(tail -1 /tmp/test_result.txt)
+          if [[ "$result" == PASSED* ]]; then
+            echo "✅ ${{ matrix.device }}: Tests passed"
+          else
+            echo "❌ ${{ matrix.device }}: Tests failed"
+            cat /tmp/test_result.txt
+            exit 1
+          fi
