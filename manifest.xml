@@ -7,7 +7,7 @@
         launcherIcon="@Drawables.LauncherIcon"
         type="datafield"
         minSdkVersion="6.0.0"
-        version="1.2.0">
+        version="1.2.1">
         <iq:products>
             <iq:product id="edge1050" />
             <iq:product id="edge840" />
