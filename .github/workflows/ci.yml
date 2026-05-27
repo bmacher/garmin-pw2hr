@@ -54,7 +54,7 @@ jobs:
           sleep 2
           simulator > /dev/null 2>&1 &
           # Wait for simulator to be ready (retry up to 30s)
-          for i in $(seq 1 6); do
+          for i in $(seq 1 12); do
             sleep 5
             if monkeydo bin/test.prg ${{ matrix.device }} -t > /tmp/test_result.txt 2>&1; then
               break

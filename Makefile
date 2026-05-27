@@ -3,7 +3,7 @@ MONKEYC := $(SDK_HOME)/bin/monkeyc
 JAVA_HOME := /opt/homebrew/opt/openjdk@17
 KEY := developer_key.der
 
-.PHONY: release build dev-build
+.PHONY: release build dev-build tests
 
 release:
 	@current=$$(grep -o 'version="[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*"' manifest.xml | head -1 | sed 's/version="//;s/"//'); \
@@ -70,3 +70,15 @@ dev-build:
 	sed -i '' 's|<string id="AppName">Pw/Hr (dev)</string>|<string id="AppName">Pw/Hr</string>|' resources/strings/strings.xml; \
 	echo ""; \
 	echo "✅ Built dev/Pw2Hr-dev.prg"
+
+tests:
+	@echo "Building tests..."; \
+	mkdir -p bin; \
+	JAVA_HOME="$(JAVA_HOME)" "$(MONKEYC)" -f monkey.jungle -o bin/Pw2HrTest.prg -d edge840 -y "$(KEY)" -t; \
+	echo "Starting simulator..."; \
+	JAVA_HOME="$(JAVA_HOME)" "$(SDK_HOME)/bin/connectiq" & \
+	sleep 5; \
+	echo "Running tests..."; \
+	JAVA_HOME="$(JAVA_HOME)" "$(SDK_HOME)/bin/monkeydo" bin/Pw2HrTest.prg edge840 -t; \
+	echo ""; \
+	echo "✅ Tests complete"
