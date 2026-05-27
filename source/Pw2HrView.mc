@@ -42,6 +42,22 @@ class Pw2HrView extends WatchUi.DataField {
     }
 
     function onTimerLap() as Void {
+        resetLapAccumulators();
+    }
+
+    function onWorkoutStepComplete() as Void {
+        resetLapAccumulators();
+    }
+
+    function onWorkoutStarted() as Void {
+        resetLapAccumulators();
+    }
+
+    function onNextMultisportLeg() as Void {
+        resetLapAccumulators();
+    }
+
+    private function resetLapAccumulators() as Void {
         _lapPowerSum = 0.0f;
         _lapHrSum = 0.0f;
         _lapSamples = 0;
